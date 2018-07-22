@@ -49,7 +49,6 @@ int main()
 {
 	while (scanf("%d%d", &M, &N) != EOF) {
 		init();
-
 		for (int i = 0; i < M; i++)
 			scanf("%d", m + i);
 		for (int i = 0; i < N; i++)
