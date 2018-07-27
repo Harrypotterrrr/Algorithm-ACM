@@ -1,7 +1,7 @@
 /************************************************
 Problem: 		HDU 6301 Distinct Values
 Algorithm: 		IQ 
-Difficulty: 	+++
+Difficulty: 	++++
 Significance:	++++
 Remark:			TLE
 *************************************************/
