@@ -1,9 +1,9 @@
 /************************************************
 Problem: 		  HDU 6312 Game
-Algorithm: 		IQ
+Algorithm: 		Game
 Difficulty: 	++++
 Significance:	+++
-Remark:			
+Remark:			  Game problem
 *************************************************/
 #include<bits/stdc++.h>
 using namespace std;

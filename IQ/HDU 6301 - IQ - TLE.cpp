@@ -6,46 +6,86 @@ Significance:	++++
 Remark:			TLE
 *************************************************/
 #define _CRT_SECURE_NO_WARNINGS
-#include <bits/stdc++.h>
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <stdio.h>
+#include <vector>
+#include <functional>
+#include <queue>
 using namespace std;
 
-int min_start[100010];
-int num[100010];
+
+struct Node {
+	int start;
+	int end;
+	int length;
+	Node() {};
+	Node(int start, int end, int length) {
+		this->start = start;
+		this->end = end;
+		this->length = length;
+	}
+	bool operator<(const Node &t)const {
+		if (this->start == t.start)
+			return this->length < t.length;
+		else
+			return this->start > t.start;
+	}
+};
+
+bool node[100005];
+int num[10005] = { 0 };
 int main()
 {
+	int  n, m, tmp_s, tmp_e;
 	int T;
 	scanf("%d", &T);
-	while (T--) {
-		memset(min_start, 0, sizeof(min_start));
-		memset(num, 0, sizeof(num));
 
-		int n, m;
+	while (T--) {
+		memset(node, false, sizeof(node));
+		memset(num, 0, sizeof(num));
+		priority_queue<Node>pQ;
+
 		scanf("%d%d", &n, &m);
-		for (int i = 1; i <= n; i++)
-			min_start[i] = i;
-		for (int i = 1; i <= m; i++) {
-			int start, end;
-			scanf("%d%d", &start, &end);
-			min_start[end] = min(min_start[end], start);
+		for (int i = 0; i < m; i++) {
+			scanf("%d%d", &tmp_s, &tmp_e);
+			pQ.push(Node(tmp_s, tmp_e, tmp_e - tmp_s + 1));
 		}
-		for (int i = n - 1; i >= 1; i--)
-			min_start[i] = min(min_start[i],min_start[i + 1]);
-		
-		set<int>S;
+
 		int p = 1;
-		for (int i = 1; i <= n; i++)
-			S.insert(i);
-		for (int i = 1; i <= n; i++) {
-			while (min_start[i] > p) {
-				S.insert(num[p]);
-				p++;
+		while (!pQ.empty()) {
+			Node nw = pQ.top();
+			pQ.pop();
+			if (node[nw.start] != 0) {
+				continue;
 			}
-			num[i] = *(S.begin());
-			S.erase(*(S.begin()));
+			if (num[nw.start] == 0) {
+				for (int i = 0; i < nw.length; i++)
+					num[nw.start + i] = i + 1;
+				node[nw.start] = true;
+			}
+			else if (num[nw.start] != 0) {
+				priority_queue<int, vector<int>, greater<int> >tmp;
+				for (int i = 0, j = 1; i < nw.length; i++) {
+					if (num[nw.start + i] != 0)
+						tmp.push(num[nw.start]);
+					else if (j != tmp.top())
+						num[nw.start + i] = j++;
+					else if (j == tmp.top()) {
+						j++;
+						i--;
+					}
+				}
+			}
 		}
-		printf("%d", num[1]);
-		for (int i = 2; i <= n; i++)
-			printf(" %d", num[i]);
-			puts("");
+		for (int i = 1; i <= n; i++) {
+			if (num[i])
+				printf("%d ", num[i]);
+			else
+				printf("1 ");
+		}
+		putchar('\n');
 	}
+	return 0;
 }
