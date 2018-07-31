@@ -79,10 +79,10 @@ int main() {
 		mst(dp, 0);
 		ctr = 0;
 
-		int v, w;
+		int u, w;
 		rep(i, 1, n) {
-			input2(v,w);
-			addEdge(v,i+1, w);
+			input2(u, w);
+			addEdge(u, i + 1, w);
 		}
 		dfs_down(1);
 		dfs_up(1);
