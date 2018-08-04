@@ -1,6 +1,6 @@
 /************************************************
 Problem: 		HDU 1241 Oil Deposits
-Algorithm: 		dfs-Search
+Algorithm: 		DFS
 Difficulty: 	+
 Significance:	+
 Remark:

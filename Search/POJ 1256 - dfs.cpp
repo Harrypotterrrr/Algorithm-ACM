@@ -1,6 +1,6 @@
 /************************************************
 Problem: 		POJ 1256 Anagram
-Algorithm: 		dfs-Search
+Algorithm: 		DFS
 Difficulty: 	++
 Significance:	++
 Remark:			important solution!

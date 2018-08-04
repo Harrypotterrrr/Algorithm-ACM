@@ -1,6 +1,6 @@
 /************************************************
 Problem: 		CF 915C  Permute Digits
-Algorithm: 		dfs
+Algorithm: 		DFS
 Difficulty: 	+
 Significance:	++
 Remark:			DF solution and ouput the detail by dfs

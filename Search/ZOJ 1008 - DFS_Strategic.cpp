@@ -1,6 +1,6 @@
 /************************************************
 Problem: 		ZOJ 1008 Gnome Tetravex
-Algorithm: 		strategic search
+Algorithm: 		Strategic search
 Difficulty: 	+++
 Significance:	++
 Remark:

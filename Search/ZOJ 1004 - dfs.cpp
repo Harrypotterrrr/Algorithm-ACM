@@ -1,6 +1,6 @@
 /************************************************
 Problem: 		ZOJ 1004 Anagrams by Stack
-Algorithm: 		dfs-Search
+Algorithm: 		DFS
 Difficulty: 	+
 Significance:	+
 Remark:

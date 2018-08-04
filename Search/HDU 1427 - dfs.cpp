@@ -1,6 +1,6 @@
 /************************************************
 Problem: 		HDU 1427 速算24点
-Algorithm: 		dfs-Search
+Algorithm: 		DFS
 Difficulty: 	++
 Significance:	+
 Remark:			liable to make mistake for searching strategy
