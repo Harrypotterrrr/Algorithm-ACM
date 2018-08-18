@@ -1,6 +1,6 @@
 /************************************************
 Problem: 		POJ 3090 Visible Lattice Points
-Algorithm: 		Eular
+Algorithm: 		Euler
 Difficulty:		
 Significance:	**
 Remark:			
