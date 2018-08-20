@@ -107,4 +107,15 @@
     On the other hand, if we take $i$, which is the factor of $N$, then $gcd(N,i)$ is exactly i, and the number of which we can calculated is $\phi(\frac{N}{g_i} = \frac{N}{i})$\\
     Therefore, traversing i range from 1 to N to find the factor of N is the essential optimization to the algorithm.
 
+    \subsection{\LARGE HDU 6425}
+    It bases on the inclusive-exclusive priciple.\\
+    a is the number of people have neither rackets nor balls, so it is unnecessary to include them to calculate "orgnizing fail", that is under the condition that at least one ball and at least two rackets inclusive.\\
+    So $2^a$ means none of students for the number b,c,d is inclusive.\\
+    Then we exclude these group now.\\
+    Similarly, $2^b$ is the number of students who don't have any ball no matter they are labeled c or d. $2^c$ is the number of students who don't have any racket no matter they are labeled b or d, while $2^c(b+d)$ worth our attention, for it represents the students with one ball and one racket, which is obviously the condition that meet the problem request.\\
+    According to the inclusive-exclusive priciple, we have got the the number of rackets failing ad balls failing, so the next target is find not only rackets but balls fail to meet request, that is with no ball and one-or-zero rackets.\\
+    The number of which is $b+1$
+    so the totally sum is
+    \[2^a(2^b + (b+d+1)2^c - (b+1))\]
+    It is noteworthy of the modular operating.
 \end{document}
