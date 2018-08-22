@@ -118,4 +118,31 @@
     so the totally sum is
     \[2^a(2^b + (b+d+1)2^c - (b+1))\]
     It is noteworthy of the modular operating.
+
+    \subsection{\LARGE HDU 6432}
+
+    考虑使用容斥原理进行计数.
+    包含至少一个形如 $[i, i + 1]$ 或 $[n, 1]$ 这样的子串的环排列个数是 $\binom{n}{1} (n - 2)!$ 个\\
+    可以推广为包含至少 $k (0 \leq k < n)$ 个的环排列个数是
+    \[
+        \binom{n}{k}(n-k-1)!
+    \]
+    同时注意到包含 $n$ 个的环排列个数一定是 $1$ 个.\\
+    所以最终答案就是\\
+    $$(-1)^n + \sum_{k = 0}^{n - 1} (-1)^k \binom{n}{k} (n - k - 1)!$$
+
+    \subsection{\LARGE HDU 6434}
+
+    令 $a=i-j$, 先枚举 $i$ 再枚举 $a$
+    \begin{align*}
+        & \sum_{i=1}^n \sum_{j=1}^{i-1} [\gcd(i+j,i-j)=1]\\
+        = & \sum_{i=1}^n \sum_{a=1}^{i-1} [\gcd(2i-a,a)=1]\\
+        = & \sum_{i=1}^n \sum_{a=1}^{i-1} [\gcd(2i,a)=1]
+    \end{align*}
+    即对于每个 $i$, 求有多少个小于它的 $a$ 满足 $\gcd(i,a)=1$ 且 $a$ 是奇数.\\
+    当 $i$ 是奇数时, 答案为 $\frac{\varphi(i)}{2}$.\\
+    当 $i$ 是偶数时, 答案为$\varphi(i)$.\\
+    注意 $i=1$ 时, 答案为 $0$.\\
+    记个前缀和就好了, 复杂度为 $O(N+T)$.\\
+
 \end{document}
