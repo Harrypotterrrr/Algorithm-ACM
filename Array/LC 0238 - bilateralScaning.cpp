@@ -12,6 +12,7 @@ Note: Please solve it without division and in O(n).
 */
 
 #include "../include/include.h"
+
 class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {

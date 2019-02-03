@@ -27,15 +27,15 @@ public:
         for(auto i=1 ; i<nums.size(); i++){
             if(nums[i] > 0){
                 int tmp = t_maxn * nums[i];
-                t_maxn = nums[i] > tmp ? nums[i] : tmp;
+                t_maxn = max(nums[i], tmp);
                 t_minn = t_minn * nums[i];
-                maxn = maxn > t_maxn ? maxn : t_maxn;
+                maxn = max(maxn, t_maxn);
             }
             else if(nums[i] < 0){
                 int tmp = t_maxn * nums[i];
                 t_maxn = t_minn * nums[i];
-                t_minn = nums[i] < tmp ? nums[i] : tmp;
-                maxn = maxn > t_maxn ? maxn : t_maxn;
+                t_minn = min(nums[i], tmp);
+                maxn = max(maxn, t_maxn);
             }
             else{
                 t_maxn = t_minn = 0;
