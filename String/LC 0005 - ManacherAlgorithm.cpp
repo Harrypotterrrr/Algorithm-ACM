@@ -20,51 +20,40 @@ Output: "bb"
 class Solution {
 public:
 
-    # bruceForce solution
-    string longestPalindrome_bruceForce(string s) {
-        auto n = s.length();
-        int st = 0;
-        int rtn = 1;
-        for(auto i=0 ; i<n; i++){
-            for(auto j=i+1 ; j<n; j++){
-                auto k = (j-i+1 >> 1) - 1;
-                for(; k>=0 ; k--){
-                    if(s[j-k] != s[i+k])
-                        break;
-                }
-                if(k < 0 && j - i + 1 > rtn){
-                    rtn = j - i + 1;
-                    st = i;
-                }
-            }
-            if(rtn >= n - i + 1)
-                return s.substr(st, rtn);
-        }
-        return s.substr(st, rtn);
-    }
-    
-    # DP solution
+    # Manacher's Algorithm solution
     string longestPalindrome(string s) {
         if(s.empty())
             return "";
         
-        bool flags[s.length()][s.length()] = {false};
-        int max_len=1, max_st=0;
-        int len = s.length();
-        for(int i=0 ; i<len; i++){
-            for(int j=0 ; j<len-i ; j++){
-                if((i<2 || flags[j+1][i+j-1]) && s[j] == s[i+j]){
-                    flags[j][i+j] = true;
-                    if(i+1 > max_len){
-                        max_len = i+1;
-                        max_st = j;
-                    }
+        string str((s.length()<<1) + 1, '#');
+        for (auto i=0 ; i<s.length() ; i++)
+            str[(i<<1) + 1] = s[i];
+        
+        int len = str.length(), center = 1, right = 2;
+        int max_ra = 1, max_center= 1;
+        int ra[len] = {0, 1}, mirror;
+        
+        for(int i=2 ; i<len ; i++){
+            mirror = (center << 1) - i;
+            if(ra[mirror] >= right - i){
+                do{
+                    right++;
+                }while(right < len && (i<<1) >= right && str[right] == str[(i<<1)-right]);
+                
+                right--; 
+                ra[i] = right - i;
+                center = i;
+                if(max_ra < ra[i]){
+                    max_ra = ra[i];
+                    max_center = i;
                 }
             }
+            else
+                ra[i] = ra[mirror];
         }
-        return s.substr(max_st, max_len);
+        
+        return s.substr((max_center - max_ra) >> 1, max_ra);
     }
-
 };
 
 string stringToString(string input) {
