@@ -30,19 +30,37 @@ P     I
 
 class Solution {
 public:
-    string convert(string s, int numRows) {
-        if(numRows == 1) return s;
-        vector<vector<char>>storage(numRows);
+  
+	// using extra space to store string
+  	string convert_extraSpaces(string s, int numRows) {
+        if(numRows <= 1) return s;
+        vector<string>storage(numRows);
         string ans;
         int tmp = numRows - 1 << 1;
         for(auto i=0, line=0 ; i<s.length() ; i++){
-            storage[line].push_back(s[i]);
+            storage[line]+= s[i];
             if(i % tmp < numRows - 1) line++;
             else line--;
         }
         for(auto i=0 ; i<numRows ; i++)
-            for(auto j=0 ; j<storage[i].size() ; j++)
-                ans += storage[i][j];
+                ans += storage[i];
+        return ans;
+    }
+  
+    string convert(string s, int numRows) {
+        
+        if(numRows == 1) return s;
+
+        string ans;
+        int len = s.length();
+        int cycLen = numRows - 1 << 1;
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j + i < len; j += cycLen) {
+                ans += s[j + i];
+                if(i > 0 && i < numRows - 1 && j + cycLen - i < len)
+                    ans += s[j + cycLen - i];
+            }
+        }
         return ans;
     }
 };
