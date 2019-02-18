@@ -48,6 +48,18 @@ class Solution {
 public:
     
     int ans = 0;
+    
+    int searchNode_2(TreeNode *node){
+        if(!node) return 0;
+        int left_rtn = searchNode_2(node->left);
+        int right_rtn = searchNode_2(node->right);
+        int left_ctr = 0, right_ctr = 0;
+        if(node->left && node->left->val == node->val) left_ctr = left_rtn + 1;
+        if(node->right && node->right->val == node->val) right_ctr = right_rtn + 1;
+        ans = max(ans, left_ctr + right_ctr);
+        return max(left_ctr, right_ctr);
+    }
+    
     int searchNode(TreeNode * node, int num){
         if(!node) return 0;
         
@@ -62,6 +74,7 @@ public:
     int longestUnivaluePath(TreeNode* root) {
         if(root == NULL) return 0;
         searchNode(root, root->val);
+        // searchNode_2(root);
         return ans;
     }
 };
