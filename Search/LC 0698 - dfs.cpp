@@ -26,82 +26,41 @@ public:
 	int Sum, target, n;
 	vector<int>V;
 	vector<bool>flag;
+
+	static bool cmd(int a, int b) {
+		return a > b;
+	}
+
 	bool dfs(int ctr, int sum, int st) {
 		if (sum == target) {
 			if (ctr + 1 == n) return true;
-			//if(dfs(ctr + 1, 0, 0) == true) return true;
 			return dfs(ctr + 1, 0, 0);
 		}
-		for (int i = st; i<V.size(); i++) {
+		for (int i = st; i < V.size(); i++) {
 			if (flag[i] == false) continue;
-			//if (sum + V[i] > target) break;
+			if (sum + V[i] > target) continue;
 			flag[i] = false;
 			if (dfs(ctr, sum + V[i], i + 1) == true) return true;
 			flag[i] = true;
+			while (i < V.size() - 1 && V[i] == V[i + 1]) i++; 
 		}
 		return false;
 	}
 
 	bool canPartitionKSubsets(vector<int>& nums, int k) {
 		for (auto i = 0; i<nums.size(); i++) {
+			if (nums[i] == 0) {
+				k--;
+				continue;
+			}
 			V.push_back(nums[i]);
 			flag.push_back(true);
 			Sum += nums[i];
 		}
 		if (Sum % k != 0) return false;
-		//std::sort(V.begin(), V.end());
+		sort(V.begin(), V.end(), Solution::cmd);
 		n = k;
 		target = Sum / n;
 		return dfs(0, 0, 0);
 	}
-};
-
-void trimLeftTrailingSpaces(string &input) {
-	input.erase(input.begin(), find_if(input.begin(), input.end(), [](int ch) {
-		return !isspace(ch);
-	}));
-}
-
-void trimRightTrailingSpaces(string &input) {
-	input.erase(find_if(input.rbegin(), input.rend(), [](int ch) {
-		return !isspace(ch);
-	}).base(), input.end());
-}
-
-vector<int> stringToIntegerVector(string input) {
-	vector<int> output;
-	trimLeftTrailingSpaces(input);
-	trimRightTrailingSpaces(input);
-	input = input.substr(1, input.length() - 2);
-	stringstream ss;
-	ss.str(input);
-	string item;
-	char delim = ',';
-	while (getline(ss, item, delim)) {
-		output.push_back(stoi(item));
-	}
-	return output;
-}
-
-int stringToInteger(string input) {
-	return stoi(input);
-}
-
-string boolToString(bool input) {
-	return input ? "True" : "False";
-}
-
-int main() {
-	string line;
-	while (getline(cin, line)) {
-		vector<int> nums = stringToIntegerVector(line);
-		getline(cin, line);
-		int k = stringToInteger(line);
-
-		bool ret = Solution().canPartitionKSubsets(nums, k);
-
-		string out = boolToString(ret);
-		cout << out << endl;
-	}
-	return 0;
-}
+}; 
