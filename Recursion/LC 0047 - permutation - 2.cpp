@@ -20,31 +20,22 @@ class Solution {
 public:
     
     vector<vector<int>>ans;
-    vector<int> V, cur;
-    vector<bool> flag;
     
-    void dfs(int begin){
-        if(begin == V.size()){
+    void getNextPermutation(vector<int>cur, int begin){
+        if(begin == cur.size()){
             ans.push_back(cur);
             return;
         }
-        for(int i=0 ; i<V.size() ; i++){
-            if(flag[i] == false) continue;
-            if(i > 0 && V[i] == V[i-1] && flag[i-1] == true) continue;
-            flag[i] = false;
-            cur.push_back(V[i]);
-            dfs(begin + 1);
-            flag[i] = true;
-            cur.pop_back();
+        for(int i=begin ; i<cur.size() ; i++){
+            if(i != begin && cur[begin] == cur[i]) continue;
+            swap(cur[begin], cur[i]);
+            getNextPermutation(cur, begin+1);
+            // swap(cur[begin], cur[i]);
         }
     }
     vector<vector<int>> permuteUnique(vector<int>& nums) {
         std::sort(nums.begin(), nums.end());
-        for(auto i=0 ; i<nums.size() ; i++){
-            V.push_back(nums[i]);
-            flag.push_back(true);
-        }
-        dfs(0);
+        getNextPermutation(nums, 0);
         return ans;
     }
 };
