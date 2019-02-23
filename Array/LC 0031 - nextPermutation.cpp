@@ -30,6 +30,10 @@ public:
 			swap(nums[j], nums[i - 1]);
 		}
 		reverse(nums.begin() + i, nums.end());
+		/*
+        int len = nums.size() - i - 1 >> 1;
+        for(int j=1 ; j<=len; j++) swap(nums[i+j], nums[nums.size()-j]); 
+        */
 	}
 };
 

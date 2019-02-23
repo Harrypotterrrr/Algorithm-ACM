@@ -20,8 +20,8 @@ class Solution {
 public:
     
     vector<vector<int>>ans;
-    
-    void getNextPermutation(vector<int>cur, int begin){
+    vector<int>cur;
+    void getNextPermutation(int begin){
         if(begin == cur.size()){
             ans.push_back(cur);
             return;
@@ -29,13 +29,17 @@ public:
         for(int i=begin ; i<cur.size() ; i++){
             if(i != begin && cur[begin] == cur[i]) continue;
             swap(cur[begin], cur[i]);
-            getNextPermutation(cur, begin+1);
-            // swap(cur[begin], cur[i]); for keep array sorted
+            getNextPermutation(begin+1);
         }
+
+        // resorted the array
+        for(int i=begin ; i <cur.size() - 1 ; i++)
+            swap(cur[i], cur[i+1]);
     }
     vector<vector<int>> permuteUnique(vector<int>& nums) {
         std::sort(nums.begin(), nums.end());
-        getNextPermutation(nums, 0);
+        for(auto i=0 ; i<nums.size() ; i++) cur.push_back(nums[i]);
+        getNextPermutation(0);
         return ans;
     }
 };
