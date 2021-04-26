@@ -1,18 +1,17 @@
 /*
-1. Two Sum
+167. Two Sum II - Input array is sorted
 */
 
 class Solution {
 public:
-
-    vector<int> twoSum(vector<int>& nums, int target) {
-        unordered_map<int, int> M;
-       
-        for(int i=0 ; i < nums.size() ; i++){
-            auto j = M.find(target - nums[i]);
-            if(j != M.end())
-                return {i, j->second};
-            M[nums[i]] = i;
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        unordered_map<int, int>M;
+        for(int i=0 ; i<numbers.size() ; i++){
+            auto j = M.find(target - numbers[i]);
+            if(j != M.end()){
+                return {j->second + 1, i + 1};
+            }
+            M[numbers[i]] = i;
         }
         return {};
     }
