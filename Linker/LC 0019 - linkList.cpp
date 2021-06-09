@@ -59,6 +59,62 @@ public:
     }
 };
 
+// Solution 2:
+
+class Solution {
+public:
+
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* p = head;
+        int N = 0;
+        while(p){
+            p = p->next;
+            N++;
+        }
+        n = N - n - 1;
+        if(n == -1){
+            ListNode* tmp = head;
+            head = head->next;
+            delete tmp;
+        }
+        else{
+            p = head;
+            while(n--) p =p->next;
+            ListNode* tmp = p->next;
+            p->next = p->next->next;
+            delete tmp;
+        }
+        return head;
+    }
+};
+
+// Solution 3:
+
+class Solution {
+public:
+
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* h = head, *p = head;
+        while(n--) h = h->next;
+        if(h == NULL){
+            ListNode* tmp = head;
+            head = head->next;
+            delete tmp;
+        }
+        else{
+            h = h->next;
+            while(h){
+                h = h->next;
+                p = p->next;
+            }
+            ListNode* tmp = p->next;
+            p->next = p->next->next;
+            delete tmp;
+        }
+        return head;
+    }
+};
+
 void trimLeftTrailingSpaces(string &input) {
     input.erase(input.begin(), find_if(input.begin(), input.end(), [](int ch) {
         return !isspace(ch);
