@@ -30,3 +30,23 @@ public:
         return ans;
     }
 };
+
+
+// Solution 2: iterative way
+
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int>ans;
+        if(!root) return ans;
+        stack<TreeNode*> S({root});
+        
+        while(!S.empty()){
+            TreeNode* cur = S.top(); S.pop();
+            ans.push_back(cur->val);
+            if(cur->right) S.push(cur->right);
+            if(cur->left) S.push(cur->left);
+        }
+        return ans;
+    }
+};
