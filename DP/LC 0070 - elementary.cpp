@@ -23,12 +23,9 @@ public:
 
 class Solution {
 public:
-
     int climbStairs(int n) {
-        int a = 1, b = 2, tmp;
-        if(n <= 2)
-            return n;
-        for(int i=3; i <=n ; i++){
+        int a = 1, b = 1, tmp;
+        for(int i=2 ; i<=n ; i++){
             tmp = b;
             b += a;
             a = tmp;
