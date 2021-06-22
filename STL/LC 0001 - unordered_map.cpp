@@ -18,6 +18,40 @@ public:
     }
 };
 
+// Solution 2: struct sort
+
+class Solution {
+public:
+
+    struct Arr{
+        int value;
+        int id;
+        Arr(int _value, int _id) : value(_value), id(_id){}
+        static bool cmp(Arr &a, Arr &b){
+            return a.value < b.value;
+        }
+    };
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<Arr>arr;
+        for(int i=0 ; i<nums.size() ; i++){
+            arr.emplace_back(nums[i], i);
+        }
+        
+        sort(arr.begin(), arr.end(), Arr::cmp);
+        
+        int left = 0 , right = nums.size() - 1;
+        while(left < right){
+            if(arr[left].value + arr[right].value > target)
+                right --;
+            else if(arr[left].value + arr[right].value < target)
+                left ++;
+            else
+                break;
+        }
+        return vector<int>({arr[left].id, arr[right].id});
+    }
+};
+
 
 void trimLeftTrailingSpaces(string &input) {
     input.erase(input.begin(), find_if(input.begin(), input.end(), [](int ch) {
