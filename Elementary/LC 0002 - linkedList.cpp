@@ -1,50 +1,43 @@
 /*
 2. Add Two Numbers
-
-You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
-
-You may assume the two numbers do not contain any leading zero, except the number 0 itself.
-
-Example:
-
-Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
-Output: 7 -> 0 -> 8
-Explanation: 342 + 465 = 807.
 */
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
 
 #include "../include/include.h"
+
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        int sum = getValue(l1) + getValue(l2);
-        bool flag = sum > 9;
-        ListNode *head = new ListNode(flag ? sum - 10 : sum);
-        ListNode *tail = head;
-        while(l1 || l2 || flag){
-            sum = getValue(l1) + getValue(l2) + flag;
-            flag = sum > 9;
-            ListNode* tmp = new ListNode(flag ? sum - 10 : sum);
-            tail->next = tmp;
-            tail = tail->next;
+        int flag = 0;
+        ListNode *p = l1, *q = l2;
+        ListNode *dummy = new ListNode(), *r = dummy;
+        while(p && q){
+            int val = p->val + q->val + flag;
+            flag = val / 10;
+            val = val % 10;
+            r->next = new ListNode(val);
+            r = r->next;
+            p = p->next;
+            q = q->next;
         }
-        return head;
-    }
-private:
-    int getValue(ListNode* &p){
-        int rtn = 0;
-        if(p){
-            rtn = p->val;
-            p = p ->next;
+        while(p){
+            int val = p->val + flag;
+            flag = val / 10;
+            val = val % 10;
+            r->next = new ListNode(val);
+            r = r->next;
+            p = p->next;
         }
-        return rtn;
+        while(q){
+            int val =q->val + flag;
+            flag = val / 10;
+            val = val % 10;
+            r->next = new ListNode(val);
+            r = r->next;
+            q = q->next;
+        }
+        if(flag)
+            r->next = new ListNode(flag);
+        return dummy->next;
     }
 };
 

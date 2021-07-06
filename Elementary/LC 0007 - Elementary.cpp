@@ -40,6 +40,35 @@ public:
     }
 };
 
+// Solution 2: not use long type
+
+class Solution {
+public:
+    int reverse(int x) {
+        int n = x, ans = 0;
+        while(n){
+            if(x > 0){
+                if(ans > INT_MAX / 10)
+                    return 0;
+                ans *= 10;
+                if(ans > INT_MAX - n % 10)
+                    return 0;
+            }
+            else{
+                if(ans < INT_MIN / 10)
+                    return 0;
+                ans *= 10;
+                if(ans < INT_MIN - n % 10)
+                    return 0;
+            }
+            ans += (n % 10);
+            n /= 10;
+        }
+        return ans;
+    }
+};
+
+
 int stringToInteger(string input) {
     return stoi(input);
 }
