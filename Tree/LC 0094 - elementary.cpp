@@ -1,17 +1,8 @@
 /*
 94. Binary Tree Inorder Traversal
 */
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+
+// Solution 1: recursion
 
 class Solution {
 public:
@@ -27,6 +18,50 @@ public:
     }
     vector<int> inorderTraversal(TreeNode* root) {
         inorder(root);
+        return ans;
+    }
+};
+
+// Solution 2: iteration
+
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int>ans;
+        stack<TreeNode*>S;
+        TreeNode *p = root, *cur = p;
+        while(p || !S.empty()){
+            while(p){
+                S.push(p);
+                p = p->left;
+            }
+            TreeNode* cur = S.top(); S.pop();
+            ans.push_back(cur->val);
+            p = cur->right;
+        }
+        return ans;
+    }
+};
+
+// Solution 3: iteration in another way
+
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int>ans;
+        stack<TreeNode*>S;
+        TreeNode *p = root, *cur = p;
+        while(p || !S.empty()){
+            if(p){
+                S.push(p);
+                p = p->left;
+            }
+            else{
+                TreeNode* cur = S.top(); S.pop();
+                ans.push_back(cur->val);
+                p = cur->right;
+            }
+        }
         return ans;
     }
 };
