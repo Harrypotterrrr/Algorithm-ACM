@@ -69,4 +69,54 @@ public:
     }
 };
 
-// Solution 4: TODO
+// Solution 4: monotone Stack, only one traversal optimization
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int n = heights.size(), ans = 0, tmp;
+        stack<int> S; // Store the index of each bar
+        vector<int>vec(n, 0);
+        
+        for(int i=0 ; i<n ; i++){
+            while(!S.empty() && heights[S.top()] >= heights[i]){
+                tmp = (i - vec[S.top()] - 1) * heights[S.top()];
+                ans = ans > tmp ? ans : tmp; 
+                S.pop();
+            }
+            if(S.empty()) vec[i] = -1;
+            else vec[i] = S.top();
+            S.push(i);
+        }
+        
+        while(!S.empty()){
+            tmp = (n - vec[S.top()] - 1) * heights[S.top()];
+            ans = ans > tmp ? ans : tmp;
+            S.pop();
+        }
+
+        return ans;
+    }
+};
+
+// Solution 5: further improvement
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        heights.push_back(0);
+        int n = heights.size(), ans = 0, tmp;
+        stack<int> S; // Store the index of each bar
+        
+        for(int i=0 ; i<n ; i++){
+            while(!S.empty() && heights[S.top()] >= heights[i]){
+                int cur = S.top(); S.pop();
+                tmp = heights[cur] * (S.empty() ? i : (i - S.top() - 1));
+                ans = ans > tmp ? ans : tmp; 
+            }
+            S.push(i);
+        }
+        
+        return ans;
+    }
+};
