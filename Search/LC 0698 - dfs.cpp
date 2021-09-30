@@ -1,66 +1,127 @@
 /*
 698. Partition to K Equal Sum Subsets
-
-Given an array of integers nums and a positive integer k, find whether it's possible to divide this array into k non-empty subsets whose sums are all equal.
-
- 
-
-Example 1:
-
-Input: nums = [4, 3, 2, 3, 5, 2, 1], k = 4
-Output: True
-Explanation: It's possible to divide it into 4 subsets (5), (1, 4), (2,3), (2,3) with equal sums.
- 
-
-Note:
-
-1 <= k <= len(nums) <= 16.
-0 < nums[i] < 10000.
 */
 
-#include "../include/include.h"
+// Solution 1: dfs:
 
 class Solution {
 public:
+    vector<bool>visited;
+    int sum = 0, n;
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        for(auto &i: nums) sum += i;
+        if(sum % k) return false;
+        n = nums.size();
+        sum /= k;
+        visited.resize(n, false);
+        return solve(nums, 0, k, 0);
+    }
+    bool solve(vector<int>& nums, int start, int k, int cur){
+        if(k == 0) return true;
+        if(cur == sum)  return solve(nums, 0, k-1, 0);
+        if(start >= n) return false;
+        
+        bool flag = solve(nums, start + 1, k, cur);
+        if(flag) return true;
+        
+        if(visited[start] || cur + nums[start] > sum) return false;
+        visited[start] = true;
+        flag = solve(nums, start + 1, k, cur + nums[start]);
+        visited[start] = false;
+        return flag;
+    }
+};
 
-	int Sum, target, n;
-	vector<int>V;
-	vector<bool>flag;
+// Solution 2: dfs for loop
 
-	static bool cmd(int a, int b) {
-		return a > b;
-	}
+class Solution {
+public:
+    vector<bool>visited;
+    int sum = 0, n;
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        for(auto &i: nums) sum += i;
+        if(sum % k) return false;
+        // sort(nums.begin(), nums.end());
+        n = nums.size();
+        sum /= k;
+        visited.resize(n, false);
+        return solve(nums, 0, k, 0);
+    }
+    bool solve(vector<int>& nums, int start, int k, int cur){
+        if(k == 0) return true;
+        if(cur == sum)  return solve(nums, 0, k-1, 0);
+        
+        for(int i=start ; i<n ; i++){
+            if(visited[i]) continue;
+            
+            visited[i] = true;
+            if(solve(nums, i + 1, k, cur+nums[i])) return true;
+            visited[i] = false;
+        }
+        return false;
+    }
+};
 
-	bool dfs(int ctr, int sum, int st) {
-		if (sum == target) {
-			if (ctr + 1 == n) return true;
-			return dfs(ctr + 1, 0, 0);
-		}
-		for (int i = st; i < V.size(); i++) {
-			if (flag[i] == false) continue;
-			if (sum + V[i] > target) continue;
-			flag[i] = false;
-			if (dfs(ctr, sum + V[i], i + 1) == true) return true;
-			flag[i] = true;
-			while (i < V.size() - 1 && V[i] == V[i + 1]) i++; 
-		}
-		return false;
-	}
+// Solution 3: sort to optimize solution 2
 
-	bool canPartitionKSubsets(vector<int>& nums, int k) {
-		for (auto i = 0; i<nums.size(); i++) {
-			if (nums[i] == 0) {
-				k--;
-				continue;
-			}
-			V.push_back(nums[i]);
-			flag.push_back(true);
-			Sum += nums[i];
-		}
-		if (Sum % k != 0) return false;
-		sort(V.begin(), V.end(), Solution::cmd);
-		n = k;
-		target = Sum / n;
-		return dfs(0, 0, 0);
-	}
-}; 
+class Solution {
+public:
+    vector<bool>visited;
+    int sum = 0, n;
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        for(auto &i: nums) sum += i;
+        if(sum % k) return false;
+        sort(nums.begin(), nums.end());
+        n = nums.size();
+        sum /= k;
+        visited.resize(n, false);
+        return solve(nums, 0, k, 0);
+    }
+    bool solve(vector<int>& nums, int start, int k, int cur){
+        if(k == 0) return true;
+        if(cur == sum)  return solve(nums, 0, k-1, 0);
+        for(int i=start ; i<n ; i++){
+            if(nums[i] + cur > sum) break;
+            if(visited[i]) continue;
+            visited[i] = true;
+            if(solve(nums, i + 1, k, cur+nums[i])) return true;
+            visited[i] = false;
+        }
+        return false;
+    }
+};
+
+// Solution 4: greed storing the large number then check, a bit slow
+
+class Solution {
+public:
+    static bool cmp(int &a, int &b){
+        return a > b;
+    }
+    vector<int>vec;
+    int sum = 0, n;
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        for(auto &i: nums) sum += i;
+        if(sum % k) return false;
+        sort(nums.begin(), nums.end(), cmp);
+
+        n = nums.size();
+        sum /= k;
+        vec.resize(k, 0);
+        return solve(nums, k, 0);
+    }
+    bool solve(vector<int>& nums, int k, int start){
+        if(start == n){
+            for(auto &i: vec) if(i != sum) return false;
+            return true;
+        }
+        
+        for(int i=0 ; i<k ; i++){
+            if(vec[i] + nums[start] > sum) continue;
+            vec[i] += nums[start];
+            if(solve(nums, k, start + 1)) return true;
+            vec[i] -= nums[start];
+        }
+        return false;
+    }
+};
