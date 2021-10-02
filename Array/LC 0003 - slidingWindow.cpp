@@ -25,6 +25,9 @@ Explanation: The answer is "wke", with the length of 3.
 
 #include "../include/include.h"
 
+
+// Solution 1: O(2n) two times traverse
+
 class Solution {
 public:
     int lengthOfLongestSubstring1(string s) {
@@ -46,27 +49,25 @@ public:
         }
         return rtn > s.length() - head? rtn : s.length() - head;
     }
-    
+};
+
+// Solution 2: O(1n) one time traverse
+
+class Solution {
+public:
     int lengthOfLongestSubstring(string s) {
-        auto head = 0;
-        int rtn = 0;
-        int uM[256];
-        memset(uM, -1, sizeof(uM));
-        for(auto i=0 ; i<s.length() ; i++){
-            
-            if(uM[s[i]] == -1)
-                uM[s[i]] = i;
-            else {
-                if(head <= uM[s[i]]){
-                    rtn = rtn > i - head ? rtn : i - head;
-                    head = uM[s[i]] + 1;
-                }
-                uM[s[i]] = i;
+        unordered_map<char, int>uM;
+        int left = -1, ans = 0, pos;
+        for(int i=0 ; i<s.size() ; i++){
+            if(uM.find(s[i]) != uM.end()){
+                pos = uM[s[i]];
+                left = left > pos ? left : pos;
             }
-            if(rtn >= s.length() - head)
-                return rtn;
+            ans = ans > i - left ? ans : i - left;
+            uM[s[i]] = i;
         }
-        return rtn > s.length() - head? rtn : s.length() - head;
+            
+        return ans;
     }
 };
 
