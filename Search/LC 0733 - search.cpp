@@ -43,16 +43,17 @@ public:
         queue<pair<int,int>>Q;
         int oldColor = image[sr][sc];
         if(newColor == oldColor) return image;
+        image[sr][sc] = newColor;
         Q.push({sr, sc});
         while(!Q.empty()){
             int x = Q.front().first;
             int y = Q.front().second;
-            image[x][y] = newColor;
             Q.pop();
             for(int i=0 ; i<4 ; i++){
                 int cur_x = x + move[i][0];
                 int cur_y = y + move[i][1];
                 if(cur_x < n && cur_x >= 0 && cur_y >= 0 && cur_y < m && image[cur_x][cur_y] == oldColor){
+                    image[cur_x][cur_y] = newColor;
                     Q.push({cur_x, cur_y});
                 }
             }
