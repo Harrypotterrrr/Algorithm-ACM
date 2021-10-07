@@ -1,81 +1,54 @@
 /*
 687. Longest Univalue Path
-
-Given a binary tree, find the length of the longest path where each node in the path has the same value. This path may or may not pass through the root.
-
-Note: The length of path between two nodes is represented by the number of edges between them.
-
-Example 1:
-
-Input:
-
-              5
-             / \
-            4   5
-           / \   \
-          1   1   5
-Output:
-
-2
-
-Example 2:
-
-Input:
-
-              1
-             / \
-            4   5
-           / \   \
-          4   4   5
-Output:
-
-2
-Note: The given binary tree has not more than 10000 nodes. The height of the tree is not more than 1000.
 */
 
-#include "../include/include.h"
+// Solution 1: recursion
 
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
 class Solution {
 public:
-    
     int ans = 0;
-    
-    int searchNode_2(TreeNode *node){
-        if(!node) return 0;
-        int left_rtn = searchNode_2(node->left);
-        int right_rtn = searchNode_2(node->right);
-        int left_ctr = 0, right_ctr = 0;
-        if(node->left && node->left->val == node->val) left_ctr = left_rtn + 1;
-        if(node->right && node->right->val == node->val) right_ctr = right_rtn + 1;
-        ans = max(ans, left_ctr + right_ctr);
-        return max(left_ctr, right_ctr);
-    }
-    
-    int searchNode(TreeNode * node, int num){
-        if(!node) return 0;
-        
-        int left_ctr = searchNode(node->left, node->val);
-        int right_ctr = searchNode(node->right, node->val);
-        ans = max(ans, left_ctr + right_ctr);
-        
-        if(node->val != num) return 0;
-        return max(left_ctr, right_ctr) + 1;
-    }
-
     int longestUnivaluePath(TreeNode* root) {
-        if(root == NULL) return 0;
-        searchNode(root, root->val);
-        // searchNode_2(root);
-        return ans;
+        if(!root) return 0;
+        int maxn = 0;
+        solve(root, -1001, maxn);
+        return ans-1;
+    }
+    
+    void solve(TreeNode* node, int anc, int &maxn){
+        if(!node){
+            maxn = 0;
+            return;
+        }
+        int left = INT_MIN, right = INT_MIN;
+        solve(node->left, node->val, left);
+        solve(node->right, node->val, right);
+        int tmp = left > right ? left + 1 : right + 1;
+        ans = ans > left + right + 1 ? ans : left + right + 1;
+        if(node->val == anc) maxn = tmp;
+        else maxn = 0;
+    }
+};
+
+// Solution 2: another way
+
+class Solution {
+public:
+    int ans = 0;
+    int longestUnivaluePath(TreeNode* root) {
+        if(!root) return 0;
+        solve(root, -1001);
+        return ans-1;
+    }
+    
+    int solve(TreeNode* node, int anc){
+        if(!node) return 0;
+        int left = solve(node->left, node->val);
+        int right = solve(node->right, node->val);
+        ans = ans > left + right + 1 ? ans : left + right + 1;
+        if(node->val != anc)
+            return 0;
+        return max(left, right) + 1;
+        
     }
 };
 
