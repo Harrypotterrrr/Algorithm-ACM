@@ -13,7 +13,6 @@ public:
         vector<vector<int>>ans;
         find_min_max(root, 0);
         ans.resize(maxn - minn + 1);
-        // cout<<minn <<" "<<maxn<<endl;;
         
         queue<pair<TreeNode*, int>>Q({{root, 0-minn}}); 
         while(!Q.empty()){
