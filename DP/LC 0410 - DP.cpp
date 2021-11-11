@@ -1,12 +1,12 @@
 /************************************************
 Problem: 		410. Split Array Largest Sum
-Algorithm: 		Dynamic Programming
+Algorithm: 		Dynamic Programming, Binary Search
 Difficulty: 	***
 Importance:		*****
-Remark:			
+Remark:			min-max problem
 *************************************************/
 
-// Solution 1: Dynamic Programming
+// Solution 1: Dynamic Programming O(n^2m)
 
 class Solution {
 public:
@@ -54,7 +54,7 @@ public:
     }
 };
 
-// Solution 3: Binary search + Greedy
+// Solution 3: Binary search + Greedy O(nlog(sum(nums)))
 
 class Solution {
 public:
