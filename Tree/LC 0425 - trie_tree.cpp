@@ -1,10 +1,12 @@
 /************************************************
 Problem: 		425. Word Squares
-Algorithm: 		Trie Tree, 
+Algorithm: 		Trie Tree, DFS
 Difficulty: 	***
 Importance:		***
 Remark:			
 *************************************************/
+
+// Solution 1: Trie tree + dfs, time complextiy upperbound O(n* 26^L * L), L is the length of each word. space complexity O(NL + N^2)
 
 class Solution {
 public:
@@ -70,6 +72,53 @@ public:
             cur_string.pop_back();
         }
     }
+};
+
+// Solution 2: prefix unordered_map + dfs, time complextiy upperbound O(n* 26^L), L is the length of each word. space complexity O(NL + N^2)
+
+class Solution {
+public:
+   
+    vector<vector<string>> ans;
+    int n;
     
+    vector<vector<string>> wordSquares(vector<string>& words) {
+        unordered_map<string, vector<string>> uM;
+        build_prefixTable(words, uM);
+                
+        vector<string> cur;
+        n = words[0].size();
+        solve(words, 0, cur, uM);
+        return ans;
+    }
+    
+    void build_prefixTable(vector<string>& words, unordered_map<string, vector<string>>& uM){
+        for(auto &word: words){
+            string ss = "";
+            for(auto &c: word){
+                ss += c;
+                uM[ss].push_back(word);
+            }
+            uM[""].push_back(word);
+        }
+    }
+    
+    void solve(const vector<string>& words, int k, vector<string> &cur, const unordered_map<string, vector<string>>& uM){
+        if(k >= n){
+            ans.push_back(cur);
+            return;
+        }
+        
+        int i = 0;
+        string prefix = "";
+        for(i=0 ; i<k ; i++) prefix += cur[i][k];
+        auto items = uM.find(prefix);
+        if(items == uM.end()) return;
+        for(auto &word: items->second){
+            cur.push_back(word);
+            solve(words, k+1, cur, uM);
+            cur.pop_back();
+        }   
+    }
     
 };
