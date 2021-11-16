@@ -52,7 +52,7 @@ public:
     }
 };
 
-// Solution 2: Topological sorting + dfs
+// Solution 2: Topological sorting, DFS
 
 class Solution {
 public:
