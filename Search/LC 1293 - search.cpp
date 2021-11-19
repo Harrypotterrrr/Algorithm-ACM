@@ -91,7 +91,7 @@ public:
     }
 };
 
-// Solution 3: TODO bfs + using defined datatype + hashing unordered set to string + std::hash mapping string to size_t
+// Solution 3: bfs + using defined datatype + hashing unordered set to string + std::hash mapping string to size_t
 
 class Solution {
 public:
