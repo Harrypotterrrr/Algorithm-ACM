@@ -1,7 +1,7 @@
 /************************************************
 Problem: 		489. Robot Room Cleaner
-Algorithm: 		Search, DFS
-Difficulty: 	**
+Algorithm: 		Search, DFS, Backtracking, Graph, Iteractive, Random
+Difficulty: 	***
 Importance:		*****
 Remark:			
 *************************************************/
@@ -25,11 +25,107 @@ Remark:
  * };
  */
 
-// Solution 1: 
+// Solution 1: Backtracking, DFS
 
+class Solution {
+public:
+    
+    void cleanRoom(Robot& robot) {
+        unordered_map<int, int> graph;
+        int move[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}}; // up, right, around, left
+        enum graph_type {visited, wall};
+        
+        function<int(int, int)> hash = [](int x, int y){
+            return (y+200)*200 + (x+100);
+            // not valid: (x+100) * 100 + (y+200) cuz the x range of 100 smaller than y range of 200 !
+        };
+        function<bool(int)>  operate = [&robot](int k){
+            if(k == 0) ;
+            else if(k == 1) robot.turnRight();
+            else if(k == 2) {robot.turnRight(); robot.turnRight();}
+            else robot.turnLeft();
+            bool flag = robot.move(); //
+            return flag;
+        };
+        function<void(int)>  deoperate = [&robot](int k){
+            if(k == 0) ;
+            else if(k == 1) robot.turnLeft();
+            else if(k == 2) {robot.turnRight(); robot.turnRight();}
+            else robot.turnRight();
+        };
+        function<void(int)>  demove = [&robot, &deoperate](int k){
+            robot.turnRight();robot.turnRight();
+            robot.move();
+            robot.turnRight();robot.turnRight();
+            deoperate(k);
+        };
+        function<void(int, int, int)> dfs = [&](int x, int y, int towards){
+            for(int i=0 ; i<4 ; i++){
+                int next_towards = (i+towards)%4;
+                int next_x = x + move[next_towards][0];
+                int next_y = y + move[next_towards][1];
+                int next_hash = hash(next_x, next_y);
+                if(graph.find(next_hash) == graph.end()){ // new grid found
+                    if(!operate(i)) {
+                        graph[next_hash] = wall;
+                        deoperate(i);
+                    }
+                    else{
+                        robot.clean();
+                        graph[next_hash] = visited;
+                        dfs(next_x, next_y, next_towards);
+                        demove(i);
+                    }
+                }
+            }
+        };
+        
+        graph[hash(0, 0)] = visited;
+        robot.clean();
+        dfs(0, 0, 0);
+    }
+};
 
+// Solution 2: much more elegant
 
-// Solution 2: Random ..
+class Solution {
+public:
+    
+    void cleanRoom(Robot& robot) {
+        unordered_set<int> graph;
+        int move[4][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}}; // up, right, around, left
+        
+        function<int(int, int)> hash = [](int x, int y){
+            return (y+200)*200 + (x+100);
+        };
+        
+        function<void(void)> demove = [&robot](){
+            robot.turnRight(); robot.turnRight();
+            robot.move();
+            robot.turnRight(); robot.turnRight();
+        };
+        
+        function<void(int, int, int)> dfs = [&](int x, int y, int towards){
+            graph.insert(hash(x, y));
+            robot.clean();
+            for(int i=0 ; i<4 ; i++){
+                int next_towards = (i+towards)%4;
+                int next_x = x + move[next_towards][0];
+                int next_y = y + move[next_towards][1];
+                int next_hash = hash(next_x, next_y);
+                if(graph.find(next_hash) == graph.end() && robot.move()){
+                    dfs(next_x, next_y, next_towards);
+                    demove();
+                }
+                robot.turnRight();
+            }
+        };
+        
+        dfs(0, 0, 0);
+    }
+};
+
+// Solution 3: Random ..
 
 class Solution {
 public:
@@ -54,3 +150,5 @@ public:
         }
     }
 };
+
+
