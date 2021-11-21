@@ -21,7 +21,7 @@ public:
         return fabs(a - b) <= epsilon;
     }
     
-    double double_lt(double &a, double &b){
+    double double_gt(double &a, double &b){
         return a - b > epsilon;
     }
     
@@ -38,12 +38,12 @@ public:
                 double tmp1 = dist_square(test_p, other_1);
                 double tmp2 = dist_square(test_p, other_2);
                 double tmp3 = dist_square(test_p, other_3);
-                if(double_lt(tmp1, tmp2)){
+                if(double_gt(tmp1, tmp2)){
                     if(!double_eq(tmp2, tmp3)) return false; 
                     diag = tmp1;
                     side = tmp2;
                 }
-                else if(double_lt(tmp2, tmp3)){
+                else if(double_gt(tmp2, tmp3)){
                     if(!double_eq(tmp1, tmp3)) return false; 
                     diag = tmp2;
                     side = tmp1;
@@ -59,12 +59,12 @@ public:
                 double tmp1 = dist_square(test_p, other_1);
                 double tmp2 = dist_square(test_p, other_2);
                 double tmp3 = dist_square(test_p, other_3);
-                if(double_lt(tmp1, tmp2)){
+                if(double_gt(tmp1, tmp2)){
                     if(!double_eq(tmp2, tmp3)) return false;
                     if(!double_eq(tmp2, side)) return false;
                     if(!double_eq(tmp1, diag)) return false;
                 }
-                else if(double_lt(tmp2, tmp3)){
+                else if(double_gt(tmp2, tmp3)){
                     if(!double_eq(tmp1, tmp3)) return false;
                     if(!double_eq(tmp1, side)) return false;
                     if(!double_eq(tmp2, diag)) return false;
@@ -95,7 +95,7 @@ public:
         return fabs(a - b) <= epsilon;
     }
     
-    double double_lt(double &a, double &b){
+    double double_gt(double &a, double &b){
         return a - b > epsilon;
     }
     
@@ -118,5 +118,52 @@ public:
             else if(num == 4) diag_num = true;
         }
         return side_num && diag_num;
+    }
+};
+
+// Solution 3: sorting
+
+class Solution {
+public:
+    
+    const double epsilon = 1e-9;
+
+    double dist_square(vector<int>&p, vector<int>&q){
+        return (p[0] - q[0]) * (p[0] - q[0]) + (p[1] - q[1]) * (p[1] - q[1]);
+    }
+    
+    double double_eq(double &a, double &b){
+        return fabs(a - b) <= epsilon;
+    }
+    
+    double double_gt(double &a, double &b){
+        return a - b > epsilon;
+    }
+    
+    double double_lt(double &a, double &b){
+        return a - b < -epsilon;
+    }
+    
+    bool validSquare(vector<int>& p1, vector<int>& p2, vector<int>& p3, vector<int>& p4) {
+        double diag, side;
+        unordered_map<double, int> uM;
+        vector<vector<int>>points = {p1, p2, p3, p4};
+        sort(points.begin(), points.end(), [](vector<int>&a, vector<int>&b){
+            // return double_lt(a[0], b[0]) || (double_eq(a[0], b[0]) && double_gt(a[1], b[1]) );
+            return a[0] < b[0] || (a[0] == b[0] && a[1] > b[1]);
+        });
+        
+        double diag1 = dist_square(points[0], points[3]);
+        double diag2 = dist_square(points[1], points[2]);
+        double side1 = dist_square(points[0], points[1]);
+        double side2 = dist_square(points[1], points[3]);
+        double side3 = dist_square(points[3], points[2]);
+        double side4 = dist_square(points[2], points[0]);
+        if(!double_eq(diag1, diag2)) return false;
+        if(!double_eq(side1, side2)) return false;
+        if(!double_eq(side2, side3)) return false;
+        if(!double_eq(side3, side4)) return false;
+        if(double_eq(diag1, side1)) return false;
+        return true;
     }
 };
