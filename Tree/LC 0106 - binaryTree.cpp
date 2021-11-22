@@ -1,6 +1,10 @@
-/*
-106. Construct Binary Tree from Inorder and Postorder Traversal
-*/
+/************************************************
+Problem: 		106. Construct Binary Tree from Inorder and Postorder Traversal
+Algorithm: 		Tree, Recursion
+Difficulty: 	**
+Importance:		**
+Remark:			
+*************************************************/
 
 /**
  * Definition for a binary tree node.
@@ -13,6 +17,9 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
+// Solution 1: linear search
+
 class Solution {
 public:
     TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
@@ -34,5 +41,25 @@ public:
             if(vec[i] == target)
                 return i;
         return -1;
+    }
+};
+
+// Solution 2: unorder_map optimization
+
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+	unordered_map<int, int>uM;
+	int n = inorder.size();
+	for(int i=0 ; i<n ; i++) uM[inorder[i]] = i;
+	function<TreeNode*(int, int, int)> solve = [&](int inorder_left, int inorder_right, int post_right) ->TreeNode* {
+		if(inorder_left > inorder_right) return nullptr;
+		TreeNode *node = new TreeNode(postorder[post_right]);
+		int inorder_id = uM[node->val];
+		node->left = solve(inorder_left, inorder_id-1, post_right - inorder_right + inorder_id - 1);
+		node->right = solve(inorder_id+1, inorder_right, post_right-1);
+		return node;
+	};
+	return solve(0, n-1, n-1);
     }
 };

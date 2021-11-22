@@ -1,7 +1,7 @@
 /************************************************
 Problem: 		792. Number of Matching Subsequences
 Algorithm: 		Trie Tree, String
-Difficulty: 	*****
+Difficulty: 	****
 Importance:		****
 Remark:			
 *************************************************/
@@ -56,7 +56,7 @@ public:
     }
 };
 
-// Solution 2: brute force O(S*total_length(words))
+// Solution 2: brute force O(S*total_length(words)) with unordered_set optimization
 
 class Solution {
 public:
@@ -87,3 +87,70 @@ public:
     }
 };
 
+// Solution 3: prefix linear scanning. O(S+total_length(words))
+
+class Solution {
+public:
+	int numMatchingSubseq(string s, vector<string>& words) {
+		int n = s.size(), m = words.size(), ans = 0;
+
+		unordered_map<char, queue<pair<int, int>>>uM;
+		for(int i=0 ; i<m ; i++){
+			auto &word = words[i];
+			uM[word[0]].push({i, 1});
+		}
+		for(auto &c: s){
+			auto &Q = uM[c];
+			for(int i=Q.size()-1 ; i>=0 ; i--){
+				auto [id, k] = Q.front(); Q.pop();
+				auto &cur = words[id];
+				if(k >= cur.size()) ans++;
+				else uM[cur[k]].push({id, k+1});
+            }
+		}
+		return ans;
+    }
+};
+
+// Solution 4: trie tree with queue
+
+class Solution {
+public:
+	struct TrieNode{
+		unordered_map<char, TrieNode*> uM;
+		bool is_end;
+        int ctr;
+		TrieNode() :is_end(false), ctr(0){}
+	};
+    
+    int numMatchingSubseq(string s, vector<string>& words) {
+        int n = s.size();
+        TrieNode *root = new TrieNode;
+        for(auto &word: words){
+            TrieNode *p = root;
+            for(auto &c: word){
+                if(p->uM.find(c) == p->uM.end()){
+                    TrieNode *new_node = new TrieNode;
+                    p->uM[c] = new_node;
+                }
+                p = p->uM[c];
+            }
+            p->ctr ++;
+            p->is_end = true;
+        }
+
+        int ans = 0;
+        unordered_map<char, queue<TrieNode*>>uM;
+        for(auto &[c, next]: root->uM) uM[c].push(next);
+        for(auto &c: s){
+            auto &Q = uM[c];
+            for(int i=Q.size()-1 ; i>=0 ; i--){
+                auto cur = Q.front(); Q.pop();
+                if(cur->is_end) ans += cur->ctr;
+                for(auto &[next_c, next]: cur->uM)
+                    uM[next_c].push(next);
+            }
+        }
+        return ans;
+    }
+};
