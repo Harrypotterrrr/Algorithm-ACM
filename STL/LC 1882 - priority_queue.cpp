@@ -1,9 +1,9 @@
 /************************************************
 Problem: 		1882. Process Tasks Using Servers
 Algorithm: 		STL, Simulation
-Difficulty: 	**
-Importance:		***
-Remark:			
+Difficulty: 	*****
+Importance:		****
+Remark:			priority_queue, array
 *************************************************/
 
 
