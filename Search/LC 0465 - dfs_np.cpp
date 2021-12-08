@@ -10,34 +10,34 @@ Remark:			NP problem, State Compression DP
 
 class Solution {
 public:
+    
     int minTransfers(vector<vector<int>>& transactions) {
         unordered_map<int, int>uM;
-        for(auto &i: transactions) {
+        for(auto &i: transactions){
             uM[i[0]] -= i[2];
             uM[i[1]] += i[2];
         }
-        vector<int>acc;
-        for(auto &i: uM) if(i.second) acc.push_back(i.second);
-        int ans = INT_MAX;
-        solve(acc, 0, 0, ans);
-        return ans;
-    }
-    
-    void solve(vector<int>&acc, int k, int ctr, int &ans){
-        while(k<acc.size() && !acc[k]) k++; 
-        // or : if(!acc[k]) {solve(acc, k+1, ctr, ans); return;}
-        if(k >= acc.size()){
-            ans = ans < ctr ? ans : ctr;
-            return;
+        vector<int>vec;
+        for(auto &i: uM){
+            if(i.second)
+                vec.push_back(i.second);
         }
-        if(ctr >= ans) return;
-        for(int i=k+1 ; i<acc.size() ; i++){
-            if(acc[i] && (unsigned(acc[k]) >> 31) ^ (unsigned(acc[i]) >> 31)){
-                acc[i] += acc[k];
-                solve(acc, k+1, ctr+1, ans);
-                acc[i] -= acc[k];
+        int n = vec.size();
+        
+        function<int(int)> solve = [&n, &vec, &solve](int k){
+            if(k >= n) return 0;
+            if(vec[k] == 0) return solve(k+1);
+            int cur = INT_MAX;
+            for(int i=k+1 ; i<n ; i++){
+                if(vec[k] == 0 || (unsigned(vec[i]) >> 31) ^ (unsigned(vec[k]) >> 31) == 0) continue;
+                vec[i] += vec[k];
+                cur = min(cur, solve(k+1) + 1);
+                vec[i] -= vec[k];
             }
-        }
+            return cur;
+        };
+        
+        return solve(0);
     }
 };
 

@@ -6,10 +6,7 @@ Importance:		***
 Remark:			
 *************************************************/
 
-// Solution 1: top to bottom, recursion + memo TODO
-
-
-// Solution 2: bottom to top, dp
+// Solution 1: DP
 
 class Solution {
 public:
@@ -28,6 +25,3 @@ public:
         return max(rob_first[0], unrob_first[0]);
     }
 };
-
-// Solution 3: space optimization
-
