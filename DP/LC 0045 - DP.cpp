@@ -1,6 +1,12 @@
-/*
-45. Jump Game II
-*/
+/************************************************
+Problem: 		45. Jump Game II
+Algorithm: 		Dynamic Programming, Greedy
+Difficulty: 	**
+Importance:		***
+Remark:			
+*************************************************/
+
+// Solution 1: DP TLE O(n^2)
 
 class Solution {
 public:
@@ -15,22 +21,21 @@ public:
     }
 };
 
-// Solution 2
+// Solution 2: Greedy O(n)
 
 class Solution {
 public:
     int jump(vector<int>& nums) {
-        int max_reach = 0, ctr = 0, i = 0;
-        
-        while(max_reach < nums.size()-1){
-            ctr ++;
-            int cur_reach = max_reach;
-            for(;i<=cur_reach ; i++)
-                max_reach = max(max_reach, nums[i] + i);
-            
-            if(cur_reach == max_reach)
-                return -1;
+        int n = nums.size();
+        int cur = 0, maxn = 0, ans = 0;
+        while(maxn < n-1){
+            int tmp = maxn;
+            for(int i=cur ; i<=tmp && i<n ; i++){
+                maxn = maxn > i + nums[i] ? maxn : i + nums[i];
+            }
+            cur = tmp + 1;
+            ans ++;
         }
-        return ctr;
+        return ans;
     }
 };

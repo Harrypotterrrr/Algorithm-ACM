@@ -1,38 +1,31 @@
-/*
-1306. Jump Game III
-*/
+/************************************************
+Problem: 		1306. Jump Game III
+Algorithm: 		DFS, BFS
+Difficulty: 	*
+Importance:		**
+Remark:			
+*************************************************/
+
+// Solution 1: DFS
 
 class Solution {
 public:
-    
-    vector<bool>flag;
-
-    bool dfs(const vector<int>& arr, int id){
-        if(arr[id] == 0)
-            return true;
-        
-//         if(flag[id] == true)
-//             return false;
-        flag[id] = true;
-        
-        bool rtn;
-        if(id + arr[id] < arr.size() && flag[id+arr[id]] == false)
-            rtn = dfs(arr, id + arr[id]);
-        if(rtn)
-            return rtn;
-        if(id - arr[id] >= 0 && flag[id-arr[id]] == false)
-            rtn = dfs(arr, id - arr[id]);
-        return rtn;
-    }
-    
     bool canReach(vector<int>& arr, int start) {
-        for(int i=0;i<arr.size();i++)
-            flag.push_back(false);
-        return dfs(arr, start);        
+        int n = arr.size();
+        vector<bool>memo(n, false);
+        function<bool(int)> solve = [&n, &solve, &memo, &arr](int k){
+            if(k < 0 || k >= n) return false;
+            if(arr[k] == 0) return true;
+            if(memo[k]) return false;
+            memo[k] = true;
+            return solve(k+arr[k]) || solve(k-arr[k]);
+        };
+        return solve(start);
     }
 };
 
-// bfs
+
+// Solution 2: BFS
 
 class Solution {
 public:

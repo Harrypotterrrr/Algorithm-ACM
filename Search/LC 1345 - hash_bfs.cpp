@@ -1,68 +1,52 @@
-/*
-1345. Jump Game IV
-*/
+/************************************************
+Problem: 		1345. Jump Game IV
+Algorithm: 		BFS, STL
+Difficulty: 	***
+Importance:		**
+Remark:			
+*************************************************/
+
+// Solution 1: BFS + unordered_map
 
 class Solution {
 public:
-
     int minJumps(vector<int>& arr) {
-        
-        if(arr.size() == 1)
-            return 0;
-        
-        unordered_map<int, vector<int>> um;
-        for(int i=0 ; i<arr.size();i++){
-            um[arr[i]].push_back(i);
+        int n = arr.size(), ans = 0;
+        unordered_map<int, vector<int>>uM;
+        vector<bool>visited_id(n, false);
+        unordered_map<int, bool>visited_value;
+        for(int i=0 ; i<n ; i++) {
+            uM[arr[i]].push_back(i);
+            visited_value[arr[i]] = false;
         }
-        
-        vector<bool> flag(arr.size(), false);
-        flag[0] = true;
-        queue<int>Q;
-        Q.push(0);
-        
-        int ctr = 0;
-        
-        
+        queue<int>Q({0}); // store the index
+        visited_id[0] = true;
         while(!Q.empty()){
-            int size = Q.size();
-            while(size--){
-                int cur = Q.front();
-                Q.pop();
-
-                int next = cur + 1;
-                if(next == arr.size() - 1){
-                    return ctr + 1;
+            for(int i=Q.size()-1 ; i>=0 ; i--){
+                auto cur_id = Q.front(); Q.pop();
+                auto cur_value = arr[cur_id];
+                if(cur_id == n-1) return ans;
+                if(cur_id + 1 < n && !visited_id[cur_id+1]) {
+                    visited_id[cur_id+1] = true;
+                    Q.push(cur_id+1);
                 }
-                if(next < arr.size() && !flag[next]){
-                    flag[next] = true;
-                    Q.push(next);
+                if(cur_id - 1 >= 0 && !visited_id[cur_id-1]){
+                    visited_id[cur_id+1] = true;
+                    Q.push(cur_id-1);
                 }
-                next = cur - 1;
-                if(next == arr.size() - 1){
-                    return ctr + 1;
-                }
-                if(next >= 0 && !flag[next]){
-                    flag[next] = true;
-                    Q.push(next);
-                }
-                
-                if(um.find(arr[cur]) == um.end())
-                    continue;
-                vector<int>&tmp_vec = um[arr[cur]];
-                for(auto i=0 ; i<tmp_vec.size(); i++){
-                    if(tmp_vec[i] == arr.size() - 1){
-                        return ctr + 1;
+                if(!visited_value[cur_value]){
+                    auto &vec = uM[cur_value];
+                    for(int j=0 ; j<vec.size() ; j++){
+                        if(!visited_id[vec[j]]){
+                            visited_id[vec[j]] = true;
+                            Q.push(vec[j]);
+                        }
                     }
-                    if(!flag[tmp_vec[i]]){
-                        flag[tmp_vec[i]] = true;
-                        Q.push(tmp_vec[i]);
-                    }
+                    visited_value[cur_value] = true;
                 }
-                um.erase(arr[cur]);
             }
-           
-            ctr++;
+            ans ++;
         }
-        return ctr;
+        return -1;
     }
 };

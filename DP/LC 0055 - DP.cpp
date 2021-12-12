@@ -1,24 +1,12 @@
-/*
-55. Jump Game
-*/
+/************************************************
+Problem: 		55. Jump Game
+Algorithm: 		Dynamic Programming, Greedy
+Difficulty: 	*
+Importance:		*
+Remark:			
+*************************************************/
 
-class Solution {
-public:
-    bool canJump(vector<int>& nums) {
-        int max_reach = 0;
-        for(int i=0 ; i<nums.size();i++){
-            if(max_reach < i){
-                return false;
-            }
-            int end = nums[i] + i;
-            if(max_reach < end)
-                max_reach = end;
-        }
-        return true;
-    }
-};
-
-// DP solution
+// Solution 1: DP solution
 
 class Solution {
 public:
@@ -33,7 +21,7 @@ public:
     }
 };
 
-// Best solution
+// Solution 2: Greedy
 
 class Solution {
 public:
